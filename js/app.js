@@ -5,6 +5,7 @@ const formulario=document.querySelector('#enviar-mail');
 
 const btnNuevo=document.querySelector('#agregar');
 const email2=document.querySelector('#email23');
+const emailLabel=document.querySelector('#email2');
 //variables para campos
 const  email=document.querySelector('#email');
 const  asunto=document.querySelector('#asunto');
@@ -23,12 +24,16 @@ function eventListeners(){
     email.addEventListener('blur',validarFormulario);
     asunto.addEventListener('blur',validarFormulario);
     mensaje.addEventListener('blur',validarFormulario);
+    email2.addEventListener('blur',validarFormulario);
+    
+    
+      //reiniciar eñ formulario
+      btnReset.addEventListener('click',resetearFormulario);
+
     //enviar email
     formulario.addEventListener('submit',enviarEmail);
 
-    //reiniciar eñ formulario
-    btnReset.addEventListener('click',resetearFormulario);
-
+  
     btnNuevo.addEventListener('click',mostrarOtro);
     
 }
@@ -39,8 +44,17 @@ function iniciarApp(){
     btnEnviar.disabled=true;
     //inabilita el boton y lo opaca
     btnEnviar.classList.add('cursor-not-allowed','opacity-50');
-    console.log('iniciando...')
+    email2.style.display='none';
+    emailLabel.style.display='none';
 }
+function mostrarOtro(e){
+
+    const parrafo=document.querySelector('#email2');
+    parrafo.style.display='flex'
+    const parrafo1=document.querySelector('#email23');
+    parrafo1.style.display='flex'
+    e.preventDefault();
+ }
 
 //valida el formulario
 
@@ -84,13 +98,22 @@ function validarFormulario(e){
 
 
     //activar el boton de enviar
+    if (email2.style.display==='flex'){
+        if(er.test(email.value) && asunto.value !=='' &&  mensaje.value!=='' && er.test(email2.value)){
+            btnEnviar.disabled=false;
+            //inabilita el boton y lo opaca
+            btnEnviar.classList.remove('cursor-not-allowed','opacity-50')
+             }
+    }else{
+        if(er.test(email.value) && asunto.value !=='' &&  mensaje.value!=='' ){
+            btnEnviar.disabled=false;
+            //inabilita el boton y lo opaca
+            btnEnviar.classList.remove('cursor-not-allowed','opacity-50')
+             }
+    
 
-    if(er.test(email.value) && asunto.value !=='' &&  mensaje.value!=='' ){
-        btnEnviar.disabled=false;
-        //inabilita el boton y lo opaca
-        btnEnviar.classList.remove('cursor-not-allowed','opacity-50')
     }
-
+        
 }
 
 
@@ -109,9 +132,16 @@ function validarFormulario(e){
     }
   
  }
+
+  //funcion que resetea formulario
+  function resetearFormulario(e){
+    formulario.reset();
+    iniciarApp();
+    e.preventDefault();
+}
  //envia el email
  function enviarEmail(e){
-    console.log('Enviar Email...')
+  
      e.preventDefault();
      //mostrar el spinner
      const spinner=document.querySelector('#spinner');
@@ -130,7 +160,8 @@ function validarFormulario(e){
         setTimeout(()=>{
             parrafo.remove();//Eliminar mensaje de exito
 
-            resetearFormulario();
+            formulario.reset();
+            iniciarApp();
             console.log('5000...')
         },5000);
 
@@ -139,15 +170,5 @@ function validarFormulario(e){
 
  }
 
- //funcion que resetea formulario
- function resetearFormulario(){
-     formulario.reset();
-     iniciarApp();
- }
 
- function mostrarOtro(){
-    const parrafo=document.querySelector('#email2');
-    parrafo.style.display='flex'
-    const parrafo1=document.querySelector('#email23');
-    parrafo1.style.display='flex'
- }
+
